@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
-import { Buffer } from 'node:buffer' // Required for the fix
 import connnectDB from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoute.js'
@@ -9,13 +8,12 @@ import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoute.js'
 
-if (typeof global.SlowBuffer === 'undefined') {
-    global.SlowBuffer = Buffer;
-}
-
 // App Config
 const app = express()
-const Port = process.env.PORT || 4000
+const port = process.env.PORT || 4000
+
+// Initialize Connections
+// Ensure connectCloudinary is called after dotenv/config has loaded the environment
 connnectDB()
 connectCloudinary()
 
@@ -33,4 +31,4 @@ app.get('/', (req, res) => {
     res.send('API Working')
 })
 
-app.listen(Port, () => console.log('Server is running on port : ' + Port))
+app.listen(port, () => console.log('Server is running on port : ' + port))
